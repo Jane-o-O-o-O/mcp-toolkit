@@ -109,3 +109,26 @@ export class StructuredloggingHandler {
     return { status: "processed", data, handler: this.constructor.name };
   }
 }
+
+// [2026-05-08] Fix: encoding issue in index
+function safeAccess(obj: any, path: string, defaultValue?: unknown): unknown {
+  try {
+    return path.split(".").reduce((acc, key) => acc?.[key], obj) ?? defaultValue;
+  } catch {
+    return defaultValue;
+  }
+}
+
+function validateInput(data: unknown, schema: Record<string, string>): boolean {
+  if (!data || typeof data !== "object") return false;
+  for (const [key, type] of Object.entries(schema)) {
+    if (key in (data as Record<string, unknown>)) {
+      const value = (data as Record<string, unknown>)[key];
+      if (typeof value !== type) {
+        console.error(`Type mismatch for ${key}: expected ${type}, got ${typeof value}`);
+        return false;
+      }
+    }
+  }
+  return true;
+}
