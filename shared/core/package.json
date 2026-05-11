@@ -1,12 +1,15 @@
 {
-  "name": "@mcp-toolkit/redis",
+  "name": "@mcp-toolkit/core",
   "version": "0.1.0",
   "type": "module",
-  "description": "Redis MCP Server - cache ops, pub/sub, key management",
+  "description": "Shared core utilities for MCP Toolkit servers — tool registration, error handling, config loading",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "bin": {
-    "mcp-redis": "./dist/index.js"
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -15,10 +18,8 @@
     "lint": "tsc --noEmit -p tsconfig.json"
   },
   "dependencies": {
-    "@mcp-toolkit/core": "workspace:*",
     "@mcp-toolkit/logger": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.12.0",
-    "ioredis": "^5.4.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {

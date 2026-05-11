@@ -1,35 +1,9 @@
 import type { SQLiteDatabase } from "./types.js";
-
-interface ToolDefinition {
-  name: string;
-  description: string;
-  inputSchema: {
-    type: "object";
-    properties: Record<string, unknown>;
-    required?: string[];
-  };
-}
-
-interface ToolResult {
-  content: Array<{ type: "text"; text: string }>;
-  isError?: boolean;
-}
-
-interface McpTool {
-  definition: ToolDefinition;
-  handler: (args: Record<string, unknown>) => Promise<ToolResult>;
-}
-
-function textResult(text: string): ToolResult {
-  return { content: [{ type: "text", text }] };
-}
-
-function errorResult(message: string): ToolResult {
-  return { content: [{ type: "text", text: `Error: ${message}` }], isError: true };
-}
+import type { McpTool, ToolResult } from "@mcp-toolkit/core";
+import { textResult, errorResult } from "@mcp-toolkit/core";
 
 export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
-  async function safeRun<T>(fn: () => T): Promise<ToolResult> {
+  function safeRun<T>(fn: () => T): ToolResult {
     try {
       const result = fn();
       if (typeof result === "string") {
@@ -141,7 +115,6 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
       return safeRun(() => {
         const table = args.table as string;
 
-        // Get column info
         const columns = db.prepare(`PRAGMA table_info('${table}')`).all() as Record<
           string,
           unknown
@@ -151,13 +124,11 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
           throw new Error(`Table '${table}' does not exist`);
         }
 
-        // Get row count
         const countRow = db.prepare(`SELECT COUNT(*) as count FROM '${table}'`).get() as
           | Record<string, unknown>
           | undefined;
         const rowCount = (countRow?.count as number) ?? 0;
 
-        // Get CREATE TABLE statement
         const createRow = db
           .prepare(
             `SELECT sql FROM sqlite_master WHERE type='table' AND name=?`,

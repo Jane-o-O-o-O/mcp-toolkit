@@ -1,32 +1,6 @@
 import type { RedisClient } from "./types.js";
-
-interface ToolDefinition {
-  name: string;
-  description: string;
-  inputSchema: {
-    type: "object";
-    properties: Record<string, unknown>;
-    required?: string[];
-  };
-}
-
-interface ToolResult {
-  content: Array<{ type: "text"; text: string }>;
-  isError?: boolean;
-}
-
-interface McpTool {
-  definition: ToolDefinition;
-  handler: (args: Record<string, unknown>) => Promise<ToolResult>;
-}
-
-function textResult(text: string): ToolResult {
-  return { content: [{ type: "text", text }] };
-}
-
-function errorResult(message: string): ToolResult {
-  return { content: [{ type: "text", text: `Error: ${message}` }], isError: true };
-}
+import type { McpTool, ToolResult } from "@mcp-toolkit/core";
+import { safeRun } from "@mcp-toolkit/core";
 
 function prefixedKey(prefix: string, key: string): string {
   return prefix ? `${prefix}${key}` : key;
@@ -37,14 +11,8 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
     return prefixedKey(keyPrefix, key);
   }
 
-  async function safeRun<T>(fn: () => Promise<T>): Promise<ToolResult> {
-    try {
-      const result = await fn();
-      return textResult(String(result));
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      return errorResult(message);
-    }
+  function redisSafeRun<T>(fn: () => Promise<T>): Promise<ToolResult> {
+    return safeRun(fn);
   }
 
   const getTool: McpTool = {
@@ -60,7 +28,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async (args) => {
-      return safeRun(async () => {
+      return redisSafeRun(async () => {
         const value = await redis.get(prefix(args.key as string));
         return value ?? "(nil)";
       });
@@ -86,9 +54,9 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       const value = args.value as string;
       const ttl = args.ttl as number | undefined;
       if (ttl !== undefined) {
-        return safeRun(() => redis.set(key, value, "EX", ttl));
+        return redisSafeRun(() => redis.set(key, value, "EX", ttl));
       }
-      return safeRun(() => redis.set(key, value));
+      return redisSafeRun(() => redis.set(key, value));
     },
   };
 
@@ -105,7 +73,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async (args) => {
-      return safeRun(() => redis.del(prefix(args.key as string)));
+      return redisSafeRun(() => redis.del(prefix(args.key as string)));
     },
   };
 
@@ -123,7 +91,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
     },
     handler: async (args) => {
       const pattern = prefix((args.pattern as string) || "*");
-      return safeRun(async () => {
+      return redisSafeRun(async () => {
         const keys = await redis.keys(pattern);
         return JSON.stringify(keys, null, 2);
       });
@@ -144,7 +112,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async (args) => {
-      return safeRun(async () => {
+      return redisSafeRun(async () => {
         const value = await redis.hget(
           prefix(args.key as string),
           args.field as string,
@@ -169,7 +137,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async (args) => {
-      return safeRun(() =>
+      return redisSafeRun(() =>
         redis.hset(
           prefix(args.key as string),
           args.field as string,
@@ -192,7 +160,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async (args) => {
-      return safeRun(async () => {
+      return redisSafeRun(async () => {
         const obj = await redis.hgetall(prefix(args.key as string));
         return JSON.stringify(obj, null, 2);
       });
@@ -218,7 +186,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
     },
     handler: async (args) => {
       const fields = args.fields as string[];
-      return safeRun(() => redis.hdel(prefix(args.key as string), ...fields));
+      return redisSafeRun(() => redis.hdel(prefix(args.key as string), ...fields));
     },
   };
 
@@ -236,7 +204,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async (args) => {
-      return safeRun(() =>
+      return redisSafeRun(() =>
         redis.publish(args.channel as string, args.message as string),
       );
     },
@@ -252,7 +220,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async () => {
-      return safeRun(() => redis.info());
+      return redisSafeRun(() => redis.info());
     },
   };
 
@@ -266,7 +234,7 @@ export function createRedisTools(redis: RedisClient, keyPrefix: string): McpTool
       },
     },
     handler: async () => {
-      return safeRun(() => redis.ping());
+      return redisSafeRun(() => redis.ping());
     },
   };
 

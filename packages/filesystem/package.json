@@ -1,12 +1,12 @@
 {
-  "name": "@mcp-toolkit/redis",
+  "name": "@mcp-toolkit/filesystem",
   "version": "0.1.0",
   "type": "module",
-  "description": "Redis MCP Server - cache ops, pub/sub, key management",
+  "description": "Filesystem MCP Server — read, write, list, delete, and manage files and directories",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
-    "mcp-redis": "./dist/index.js"
+    "mcp-filesystem": "./dist/index.js"
   },
   "scripts": {
     "build": "tsc -p tsconfig.json",
@@ -18,7 +18,6 @@
     "@mcp-toolkit/core": "workspace:*",
     "@mcp-toolkit/logger": "workspace:*",
     "@modelcontextprotocol/sdk": "^1.12.0",
-    "ioredis": "^5.4.0",
     "zod": "^3.24.0"
   },
   "devDependencies": {
