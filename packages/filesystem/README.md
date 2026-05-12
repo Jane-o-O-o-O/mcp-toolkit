@@ -1,74 +1,58 @@
-# 📁 @mcp-toolkit/filesystem
+# @mcp-toolkit/filesystem
 
-Filesystem MCP Server — read, write, list, delete, and search files and directories via the Model Context Protocol.
+文件系统 MCP Server — 为 AI Agent 提供文件读写能力。
 
-## Tools (7)
+## 功能（8 个工具）
 
-| Tool | Description |
-|------|-------------|
-| `read_file` | Read a text file's contents |
-| `write_file` | Write content to a file (creates parents) |
-| `list_directory` | List files/directories, supports recursive mode |
-| `stat` | Get file metadata (size, timestamps, type, permissions) |
-| `mkdir` | Create a directory (with parents) |
-| `delete` | Delete a file or directory (requires `MCP_FILESYSTEM_ALLOW_DELETE=true`) |
-| `search_files` | Search files matching a glob pattern |
+| 工具 | 描述 |
+|------|------|
+| `read_file` | 读取文件内容 |
+| `write_file` | 写入文件（自动创建目录） |
+| `list_dir` | 列出目录内容 |
+| `stat` | 获取文件/目录信息 |
+| `mkdir` | 创建目录 |
+| `remove` | 删除文件/目录 |
+| `copy` | 复制文件 |
+| `move` | 移动/重命名文件 |
 
-## Configuration
-
-| Env Var | Default | Description |
-|---------|---------|-------------|
-| `MCP_FILESYSTEM_ROOT` | *required* | Root directory for all operations |
-| `MCP_FILESYSTEM_ALLOW_WRITE` | `true` | Allow write/mkdir operations |
-| `MCP_FILESYSTEM_ALLOW_DELETE` | `false` | Allow delete operations |
-| `MCP_FILESYSTEM_MAX_FILE_SIZE` | `10485760` | Max file size for reads (bytes, default 10MB) |
-| `MCP_LOG_LEVEL` | `info` | Log level (debug/info/warn/error) |
-| `MCP_TRANSPORT` | `stdio` | Transport (stdio/sse/streamable-http) |
-| `MCP_PORT` | `3000` | Port for HTTP transports |
-
-## Security
-
-- **Path traversal protection** — all paths are validated to stay within `MCP_FILESYSTEM_ROOT`
-- **Write disabled by default** — set `MCP_FILESYSTEM_ALLOW_WRITE=true` to enable
-- **Delete disabled by default** — set `MCP_FILESYSTEM_ALLOW_DELETE=true` to enable
-- **File size limits** — reads are capped at `MCP_FILESYSTEM_MAX_FILE_SIZE`
-
-## Usage
+## 安装与使用
 
 ```bash
-# Read-only access
-MCP_FILESYSTEM_ROOT=/home/user/projects npx @mcp-toolkit/filesystem
+# 环境变量
+export FS_ROOT_DIR="/path/to/project"
+export FS_ALLOW_WRITE=true
+export FS_ALLOW_DELETE=false
 
-# Full access with delete
-MCP_FILESYSTEM_ROOT=/home/user/projects \
-MCP_FILESYSTEM_ALLOW_WRITE=true \
-MCP_FILESYSTEM_ALLOW_DELETE=true \
+# stdio 模式
 npx @mcp-toolkit/filesystem
 
-# In MCP config
+# HTTP 模式
+MCP_TRANSPORT=streamable-http MCP_PORT=3004 npx @mcp-toolkit/filesystem
+```
+
+## 配置
+
+| 环境变量 | 默认值 | 描述 |
+|----------|--------|------|
+| `FS_ROOT_DIR` | 必填 | 根目录路径 |
+| `FS_ALLOW_WRITE` | `true` | 允许写入 |
+| `FS_ALLOW_DELETE` | `false` | 允许删除 |
+| `FS_MAX_FILE_SIZE` | `10485760` | 最大文件大小（10MB） |
+| `MCP_LOG_LEVEL` | `info` | 日志级别 |
+| `MCP_TRANSPORT` | `stdio` | 传输模式 |
+
+## Claude Desktop 配置
+
+```json
 {
   "mcpServers": {
     "filesystem": {
       "command": "npx",
       "args": ["@mcp-toolkit/filesystem"],
       "env": {
-        "MCP_FILESYSTEM_ROOT": "/home/user/projects",
-        "MCP_FILESYSTEM_ALLOW_WRITE": "true"
+        "FS_ROOT_DIR": "/path/to/project"
       }
     }
   }
 }
-```
-
-## Programmatic API
-
-```typescript
-import { createServerContext, startServer } from "@mcp-toolkit/filesystem";
-
-const ctx = createServerContext({
-  rootDir: "/home/user/projects",
-  allowWrite: true,
-  allowDelete: false,
-});
-await startServer(ctx);
 ```

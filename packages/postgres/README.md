@@ -1,61 +1,53 @@
-# 🐘 @mcp-toolkit/postgres
+# @mcp-toolkit/postgres
 
-PostgreSQL MCP Server — query, schema inspection, and database management via the Model Context Protocol.
+PostgreSQL MCP Server — 为 AI Agent 提供 PostgreSQL 数据库操作能力。
 
-## Tools (6)
+## 功能（6 个工具）
 
-| Tool | Description |
-|------|-------------|
-| `query` | Execute a read-only SQL query with parameterized values |
-| `execute` | Execute a write SQL statement (INSERT, UPDATE, DELETE, DDL) |
-| `list_tables` | List tables in a schema (default: public) |
-| `describe_table` | Get column details — type, nullable, defaults, constraints |
-| `list_schemas` | List all schemas in the database |
-| `database_info` | Get server version, current database, and connection info |
+| 工具 | 描述 |
+|------|------|
+| `query` | 执行只读 SQL 查询 |
+| `execute` | 执行写入 SQL |
+| `list_tables` | 列出所有表 |
+| `describe_table` | 查看表结构（列、类型、约束） |
+| `list_schemas` | 列出所有 schema |
+| `database_info` | 获取数据库版本和连接信息 |
 
-## Configuration
-
-| Env Var | Default | Description |
-|---------|---------|-------------|
-| `POSTGRES_URL` | *required* | PostgreSQL connection string (also accepts `DATABASE_URL`) |
-| `POSTGRES_MAX_CONNECTIONS` | `10` | Connection pool max size |
-| `POSTGRES_QUERY_TIMEOUT` | `30000` | Query timeout in milliseconds |
-| `MCP_LOG_LEVEL` | `info` | Log level (debug/info/warn/error) |
-| `MCP_TRANSPORT` | `stdio` | Transport (stdio/sse/streamable-http) |
-| `MCP_PORT` | `3000` | Port for HTTP transports |
-
-## Usage
+## 安装与使用
 
 ```bash
-# Direct run
-POSTGRES_URL=postgresql://user:pass@localhost:5432/mydb npx @mcp-toolkit/postgres
+# 环境变量
+export PG_CONNECTION_STRING="postgresql://user:pass@localhost:5432/mydb"
 
-# In MCP config
+# stdio 模式
+npx @mcp-toolkit/postgres
+
+# HTTP 模式
+MCP_TRANSPORT=streamable-http MCP_PORT=3003 npx @mcp-toolkit/postgres
+```
+
+## 配置
+
+| 环境变量 | 默认值 | 描述 |
+|----------|--------|------|
+| `PG_CONNECTION_STRING` | 必填 | PostgreSQL 连接字符串 |
+| `PG_MAX_CONNECTIONS` | `10` | 最大连接数 |
+| `PG_QUERY_TIMEOUT` | `30000` | 查询超时（毫秒） |
+| `MCP_LOG_LEVEL` | `info` | 日志级别 |
+| `MCP_TRANSPORT` | `stdio` | 传输模式 |
+
+## Claude Desktop 配置
+
+```json
 {
   "mcpServers": {
     "postgres": {
       "command": "npx",
       "args": ["@mcp-toolkit/postgres"],
-      "env": { "POSTGRES_URL": "postgresql://user:pass@localhost:5432/mydb" }
+      "env": {
+        "PG_CONNECTION_STRING": "postgresql://user:pass@localhost:5432/mydb"
+      }
     }
   }
 }
 ```
-
-## Programmatic API
-
-```typescript
-import { createServerContext, startServer } from "@mcp-toolkit/postgres";
-
-const ctx = createServerContext({
-  connectionString: "postgresql://localhost/mydb",
-  maxConnections: 20,
-});
-await startServer(ctx);
-```
-
-## Security Notes
-
-- Use parameterized queries (`$1`, `$2`) to prevent SQL injection
-- The `query` tool is for SELECT statements; use `execute` for writes
-- Set appropriate `POSTGRES_MAX_CONNECTIONS` for your workload
