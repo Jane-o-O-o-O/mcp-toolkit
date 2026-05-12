@@ -1,6 +1,6 @@
 import type { RedisClient } from "./tools/types.js";
 import { createRedisTools } from "./tools/index.js";
-import { createMcpServer, startStdioServer } from "@mcp-toolkit/core";
+import { createMcpServer, startServer as startServerCore } from "@mcp-toolkit/core";
 import { createLogger, type Logger } from "@mcp-toolkit/logger";
 import { loadConfig, type RedisConfig } from "./config.js";
 import { Redis as IORedis } from "ioredis";
@@ -41,5 +41,5 @@ export function createServerContext(config?: Partial<RedisConfig>): ServerContex
 }
 
 export async function startServer(ctx: ServerContext): Promise<void> {
-  await startStdioServer(ctx.server, ctx.logger, "Redis");
+  await startServerCore(ctx.server, ctx.logger, "Redis", ctx.config);
 }

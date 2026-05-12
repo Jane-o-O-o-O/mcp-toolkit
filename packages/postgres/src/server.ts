@@ -1,6 +1,6 @@
 import type { PostgresClient } from "./tools/types.js";
 import { createPostgresTools } from "./tools/index.js";
-import { createMcpServer, startStdioServer } from "@mcp-toolkit/core";
+import { createMcpServer, startServer as startServerCore } from "@mcp-toolkit/core";
 import { createLogger, type Logger } from "@mcp-toolkit/logger";
 import { loadConfig, type PostgresConfig } from "./config.js";
 import { createPgClient } from "./tools/types.js";
@@ -38,5 +38,5 @@ export function createServerContext(config?: Partial<PostgresConfig>): ServerCon
 }
 
 export async function startServer(ctx: ServerContext): Promise<void> {
-  await startStdioServer(ctx.server, ctx.logger, "PostgreSQL");
+  await startServerCore(ctx.server, ctx.logger, "PostgreSQL", ctx.config);
 }

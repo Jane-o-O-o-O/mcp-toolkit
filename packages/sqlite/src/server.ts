@@ -1,6 +1,6 @@
 import type { SQLiteDatabase } from "./tools/types.js";
 import { createSQLiteTools } from "./tools/index.js";
-import { createMcpServer, startStdioServer } from "@mcp-toolkit/core";
+import { createMcpServer, startServer as startServerCore } from "@mcp-toolkit/core";
 import { createLogger, type Logger } from "@mcp-toolkit/logger";
 import { loadConfig, type SQLiteConfig } from "./config.js";
 import Database from "better-sqlite3";
@@ -41,5 +41,5 @@ export function createServerContext(config?: Partial<SQLiteConfig>): ServerConte
 }
 
 export async function startServer(ctx: ServerContext): Promise<void> {
-  await startStdioServer(ctx.server, ctx.logger, "SQLite");
+  await startServerCore(ctx.server, ctx.logger, "SQLite", ctx.config);
 }

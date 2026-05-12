@@ -1,5 +1,5 @@
 import { createFilesystemTools } from "./tools/index.js";
-import { createMcpServer, startStdioServer } from "@mcp-toolkit/core";
+import { createMcpServer, startServer as startServerCore } from "@mcp-toolkit/core";
 import { createLogger, type Logger } from "@mcp-toolkit/logger";
 import { loadConfig, type FilesystemConfig } from "./config.js";
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
@@ -40,5 +40,5 @@ export function createServerContext(config?: Partial<FilesystemConfig>): ServerC
 }
 
 export async function startServer(ctx: ServerContext): Promise<void> {
-  await startStdioServer(ctx.server, ctx.logger, "Filesystem");
+  await startServerCore(ctx.server, ctx.logger, "Filesystem", ctx.config);
 }
