@@ -2,12 +2,15 @@
   "name": "@mcp-toolkit/filesystem",
   "version": "0.1.0",
   "type": "module",
-  "description": "Filesystem MCP Server — read, write, list, delete, and manage files and directories",
+  "description": "Filesystem MCP Server \u2014 read, write, list, delete, and manage files and directories",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "mcp-filesystem": "./dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",

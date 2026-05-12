@@ -2,12 +2,15 @@
   "name": "@mcp-toolkit/github",
   "version": "0.1.0",
   "type": "module",
-  "description": "GitHub MCP Server — repos, issues, PRs, search via GitHub REST API",
+  "description": "GitHub MCP Server \u2014 repos, issues, PRs, search via GitHub REST API",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "bin": {
     "mcp-github": "./dist/index.js"
   },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",

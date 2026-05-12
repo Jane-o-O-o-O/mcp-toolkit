@@ -2,15 +2,12 @@
   "name": "@mcp-toolkit/core",
   "version": "0.1.0",
   "type": "module",
-  "description": "Shared core utilities for MCP Toolkit servers — tool registration, error handling, config loading",
+  "description": "Shared core utilities for MCP Toolkit servers \u2014 tool registration, error handling, config loading",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
-    }
-  },
+  "files": [
+    "dist"
+  ],
   "scripts": {
     "build": "tsc -p tsconfig.json",
     "dev": "tsx src/index.ts",
@@ -26,5 +23,11 @@
     "@types/node": "^22.0.0",
     "typescript": "^5.6.0",
     "vitest": "^3.0.0"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
   }
 }
