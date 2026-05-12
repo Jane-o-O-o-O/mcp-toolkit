@@ -1,12 +1,6 @@
 import type { GitHubClient, GitHubRepo, GitHubIssue, GitHubPR } from "./types.js";
-import type { McpTool, ToolResult } from "@mcp-toolkit/core";
-import { textResult, errorResult } from "@mcp-toolkit/core";
-
-function safeRun<T>(fn: () => Promise<T>, format?: (r: T) => string): Promise<ToolResult> {
-  return fn()
-    .then((r) => (format ? textResult(format(r)) : textResult(String(r))))
-    .catch((err) => errorResult(err instanceof Error ? err.message : String(err)));
-}
+import type { McpTool } from "@mcp-toolkit/core";
+import { safeRun } from "@mcp-toolkit/core";
 
 export function createGitHubTools(gh: GitHubClient): McpTool[] {
   const listReposTool: McpTool = {
