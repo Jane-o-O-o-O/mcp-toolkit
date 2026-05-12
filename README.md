@@ -15,11 +15,14 @@
 | `@mcp-toolkit/redis` | Redis cache, pub/sub, key management | 11 |
 | `@mcp-toolkit/sqlite` | SQLite queries, schema inspection, data export | 5 |
 | `@mcp-toolkit/postgres` | PostgreSQL queries, schema inspection, DDL | 6 |
+| `@mcp-toolkit/mysql` | MySQL queries, schema inspection, explain, database listing | 6 |
+| `@mcp-toolkit/mongodb` | MongoDB CRUD, aggregation, collection/database management | 12 |
+| `@mcp-toolkit/fetch` | HTTP requests — GET, POST, PUT, DELETE, PATCH | 5 |
 | `@mcp-toolkit/filesystem` | File read/write/list/delete with path security | 8 |
 | `@mcp-toolkit/docker` | Docker container & image management | 7 |
 | `@mcp-toolkit/github` | GitHub repos, issues, PRs via REST API | 7 |
 
-**Total: 44 tools across 6 MCP servers**
+**Total: 67 tools across 9 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -63,6 +66,20 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
       "command": "npx",
       "args": ["@mcp-toolkit/docker"]
     },
+    "mysql": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/mysql"],
+      "env": { "MYSQL_URL": "mysql://user:pass@localhost:3306/mydb" }
+    },
+    "mongodb": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/mongodb"],
+      "env": { "MONGODB_URL": "mongodb://localhost:27017/mydb" }
+    },
+    "fetch": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/fetch"]
+    },
     "filesystem": {
       "command": "npx",
       "args": ["@mcp-toolkit/filesystem"],
@@ -83,6 +100,9 @@ mcp-toolkit/
 │   ├── redis/         # Redis MCP Server (ioredis)
 │   ├── sqlite/        # SQLite MCP Server (better-sqlite3)
 │   ├── postgres/      # PostgreSQL MCP Server (pg)
+│   ├── mysql/         # MySQL MCP Server (mysql2)
+│   ├── mongodb/       # MongoDB CRUD & Aggregation (mongodb)
+│   ├── fetch/         # HTTP Fetch MCP Server (native fetch)
 │   ├── filesystem/    # Filesystem MCP Server (fs/promises)
 │   ├── docker/        # Docker MCP Server (dockerode)
 │   └── github/        # GitHub MCP Server (REST API)
@@ -121,6 +141,9 @@ pnpm build
 
 # Run all tests
 pnpm test
+
+# Lint
+pnpm lint
 
 # Build a specific package
 cd packages/redis && pnpm build

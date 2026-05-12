@@ -1,19 +1,10 @@
 import type { SQLiteDatabase } from "./types.js";
-import type { McpTool, ToolResult } from "@mcp-toolkit/core";
-import { textResult, errorResult } from "@mcp-toolkit/core";
+import type { McpTool } from "@mcp-toolkit/core";
+import { safeRunSync } from "@mcp-toolkit/core";
 
 export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
-  function safeRun<T>(fn: () => T): ToolResult {
-    try {
-      const result = fn();
-      if (typeof result === "string") {
-        return textResult(result);
-      }
-      return textResult(JSON.stringify(result, null, 2));
-    } catch (err) {
-      const message = err instanceof Error ? err.message : String(err);
-      return errorResult(message);
-    }
+  function run<T>(fn: () => T) {
+    return safeRunSync(fn, (r) => typeof r === "string" ? r : JSON.stringify(r, null, 2));
   }
 
   const queryTool: McpTool = {
@@ -35,7 +26,7 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
       },
     },
     handler: async (args) => {
-      return safeRun(() => {
+      return run(() => {
         const sql = args.sql as string;
         const params = (args.params as unknown[]) ?? [];
         const stmt = db.prepare(sql);
@@ -64,7 +55,7 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
       },
     },
     handler: async (args) => {
-      return safeRun(() => {
+      return run(() => {
         const sql = args.sql as string;
         const params = (args.params as unknown[]) ?? [];
         const stmt = db.prepare(sql);
@@ -88,7 +79,7 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
       },
     },
     handler: async () => {
-      return safeRun(() => {
+      return run(() => {
         const stmt = db.prepare(
           "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%' ORDER BY name",
         );
@@ -112,7 +103,7 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
       },
     },
     handler: async (args) => {
-      return safeRun(() => {
+      return run(() => {
         const table = args.table as string;
 
         const columns = db.prepare(`PRAGMA table_info('${table}')`).all() as Record<
@@ -174,7 +165,7 @@ export function createSQLiteTools(db: SQLiteDatabase): McpTool[] {
       },
     },
     handler: async (args) => {
-      return safeRun(() => {
+      return run(() => {
         const table = args.table as string;
         const limit = (args.limit as number) ?? 100;
         const where = args.where as string | undefined;

@@ -1,7 +1,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
-import type { McpTool, ToolResult } from "@mcp-toolkit/core";
-import { textResult, errorResult } from "@mcp-toolkit/core";
+import type { McpTool } from "@mcp-toolkit/core";
+import { safeRun, errorResult } from "@mcp-toolkit/core";
 
 /** Resolve and validate a path is within the root directory */
 function safePath(rootDir: string, filePath: string): string {
@@ -12,11 +12,6 @@ function safePath(rootDir: string, filePath: string): string {
   return resolved;
 }
 
-function safeRun<T>(fn: () => Promise<T>, format?: (r: T) => string): Promise<ToolResult> {
-  return fn()
-    .then((r) => (format ? textResult(format(r)) : textResult(String(r))))
-    .catch((err) => errorResult(err instanceof Error ? err.message : String(err)));
-}
 
 export function createFilesystemTools(
   rootDir: string,

@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from "vitest";
-import { createLogger, type Logger, type LogLevel } from "../src/index.js";
+import { createLogger } from "../src/index.js";
 
 describe("createLogger", () => {
   let stderrWrite: ReturnType<typeof vi.spyOn>;
