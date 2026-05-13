@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, search engines, message queues, and object storage with a single, unified toolkit.
+> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, search engines, message queues, object storage, and monitoring systems with a single, unified toolkit.
 
 ## 📦 Packages
 
@@ -24,8 +24,10 @@
 | `@mcp-toolkit/github` | GitHub repos, issues, PRs via REST API | 7 |
 | `@mcp-toolkit/s3` | S3/MinIO bucket & object storage operations | 8 |
 | `@mcp-toolkit/kafka` | Kafka topic management, produce/consume, consumer groups | 8 |
+| `@mcp-toolkit/prometheus` | Prometheus metrics query, targets, alerts, rules | 7 |
+| `@mcp-toolkit/nats` | NATS pub/sub and JetStream message streaming | 7 |
 
-**Total: 94 tools across 12 MCP servers**
+**Total: 108 tools across 14 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -106,6 +108,16 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
       "command": "npx",
       "args": ["@mcp-toolkit/kafka"],
       "env": { "KAFKA_BROKERS": "localhost:9092" }
+    },
+    "prometheus": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/prometheus"],
+      "env": { "PROMETHEUS_URL": "http://localhost:9090" }
+    },
+    "nats": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/nats"],
+      "env": { "NATS_URL": "nats://localhost:4222" }
     }
   }
 }
@@ -131,7 +143,9 @@ mcp-toolkit/
 │   ├── docker/        # Docker MCP Server (dockerode)
 │   ├── github/        # GitHub MCP Server (REST API)
 │   ├── s3/            # S3/MinIO MCP Server (@aws-sdk/client-s3)
-│   └── kafka/         # Kafka MCP Server (kafkajs)
+│   ├── kafka/         # Kafka MCP Server (kafkajs)
+│   ├── prometheus/    # Prometheus MCP Server (native fetch)
+│   └── nats/          # NATS MCP Server (nats)
 ├── docker-compose.test.yml  # Integration test environment
 ├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json

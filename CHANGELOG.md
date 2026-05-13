@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.5.0] - 2026-05-14
+
+### Added
+- **Prometheus MCP Server** (`@mcp-toolkit/prometheus`) — query, query_range, targets, alerts, rules, label_values, metadata (7 tools)
+- Supports instant and range PromQL queries, scrape target monitoring, alerting rules inspection
+- Basic auth support for secured Prometheus endpoints
+- 22 tests (14 tools + 8 config)
+- **NATS MCP Server** (`@mcp-toolkit/nats`) — publish, subscribe, jetstream_publish, jetstream_create_stream, jetstream_list_streams, jetstream_get_message, jetstream_delete_stream (7 tools)
+- Supports core NATS pub/sub and JetStream persistent messaging
+- Token and user/password authentication
+- 20 tests (10 tools + 10 config)
+- GitHub Actions CD workflow for automated npm publishing on tag push
+- Version bump script (`scripts/bump-version.sh`) for monorepo releases
+
+### Changed
+- Total tools: 94 → 108, servers: 12 → 14
+
 ## [0.4.0] - 2026-05-13
 
 ### Added
