@@ -9,13 +9,16 @@
     "test": "pnpm -r test",
     "lint": "eslint .",
     "lint:types": "pnpm -r lint",
-    "format": "prettier --write \"**/*.{ts,json}\""
+    "format": "prettier --write \"**/*.{ts,json}\"",
+    "docs:api": "typedoc"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
     "@types/node": "^22.0.0",
     "eslint": "^10.3.0",
     "prettier": "^3.4.0",
+    "typedoc": "^0.28.19",
+    "typedoc-plugin-markdown": "^4.11.0",
     "typescript": "^5.6.0",
     "typescript-eslint": "^8.59.3",
     "vitest": "^3.0.0"

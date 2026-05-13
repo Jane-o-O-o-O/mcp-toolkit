@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, and search engines with a single, unified toolkit.
+> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, search engines, message queues, and object storage with a single, unified toolkit.
 
 ## 📦 Packages
 
@@ -22,8 +22,10 @@
 | `@mcp-toolkit/filesystem` | File read/write/list/delete with path security | 8 |
 | `@mcp-toolkit/docker` | Docker container & image management | 7 |
 | `@mcp-toolkit/github` | GitHub repos, issues, PRs via REST API | 7 |
+| `@mcp-toolkit/s3` | S3/MinIO bucket & object storage operations | 8 |
+| `@mcp-toolkit/kafka` | Kafka topic management, produce/consume, consumer groups | 8 |
 
-**Total: 78 tools across 10 MCP servers**
+**Total: 94 tools across 12 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -70,7 +72,7 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
     "mysql": {
       "command": "npx",
       "args": ["@mcp-toolkit/mysql"],
-      "env": { "MYSQL_URL": "mysql://user:password@localhost:3306/mydb" }
+      "env": { "MYSQL_URL": "mysql://user:pass@localhost:3306/mydb" }
     },
     "mongodb": {
       "command": "npx",
@@ -90,6 +92,20 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
       "command": "npx",
       "args": ["@mcp-toolkit/filesystem"],
       "env": { "FS_ROOT_DIR": "/home/user/projects" }
+    },
+    "s3": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/s3"],
+      "env": {
+        "S3_ENDPOINT": "http://localhost:9000",
+        "S3_ACCESS_KEY_ID": "minioadmin",
+        "S3_SECRET_ACCESS_KEY": "minioadmin"
+      }
+    },
+    "kafka": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/kafka"],
+      "env": { "KAFKA_BROKERS": "localhost:9092" }
     }
   }
 }
@@ -113,7 +129,11 @@ mcp-toolkit/
 │   ├── fetch/         # HTTP Fetch MCP Server (native fetch)
 │   ├── filesystem/    # Filesystem MCP Server (fs/promises)
 │   ├── docker/        # Docker MCP Server (dockerode)
-│   └── github/        # GitHub MCP Server (REST API)
+│   ├── github/        # GitHub MCP Server (REST API)
+│   ├── s3/            # S3/MinIO MCP Server (@aws-sdk/client-s3)
+│   └── kafka/         # Kafka MCP Server (kafkajs)
+├── docker-compose.test.yml  # Integration test environment
+├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json
 ```
 
@@ -150,11 +170,15 @@ pnpm build
 # Run all tests
 pnpm test
 
+# Generate API docs
+pnpm docs:api
+
 # Lint
 pnpm lint
 
-# Build a specific package
-cd packages/redis && pnpm build
+# Integration tests (requires Docker)
+docker compose -f docker-compose.test.yml up -d
+bash scripts/test-integration.sh
 ```
 
 ## 📝 Common Environment Variables

@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.4.0] - 2026-05-13
+
+### Added
+- **S3/MinIO MCP Server** (`@mcp-toolkit/s3`) — list_buckets, create_bucket, delete_bucket, list_objects, get_object, put_object, delete_object, head_object (8 tools)
+- Compatible with AWS S3, MinIO, and any S3-compatible service
+- 29 tests (18 tools + 11 config)
+- **Kafka MCP Server** (`@mcp-toolkit/kafka`) — list_topics, create_topic, delete_topic, produce_message, consume_messages, describe_topic, list_consumer_groups, describe_consumer_group (8 tools)
+- Supports SASL auth (plain, scram-sha-256, scram-sha-512) and SSL
+- 31 tests (18 tools + 13 config)
+- Docker Compose integration test environment (`docker-compose.test.yml`)
+- TypeDoc API documentation generation (`pnpm docs:api`)
+- Integration test runner script (`scripts/test-integration.sh`)
+
+### Changed
+- Total tools: 78 → 94, servers: 10 → 12
+- Updated main README with S3/Kafka packages, fixed JSON config formatting
+
 ## [0.3.0] - 2026-05-13
 
 ### Added

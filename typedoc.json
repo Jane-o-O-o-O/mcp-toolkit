@@ -1,0 +1,26 @@
+{
+  "$schema": "https://typedoc.org/schema.json",
+  "entryPointStrategy": "packages",
+  "entryPoints": [
+    "shared/core",
+    "shared/logger",
+    "packages/redis",
+    "packages/sqlite",
+    "packages/postgres",
+    "packages/mysql",
+    "packages/mongodb",
+    "packages/elasticsearch",
+    "packages/docker",
+    "packages/github",
+    "packages/filesystem",
+    "packages/fetch",
+    "packages/s3",
+    "packages/kafka"
+  ],
+  "out": "docs/api",
+  "excludePrivate": true,
+  "excludeInternal": true,
+  "plugin": ["typedoc-plugin-markdown"],
+  "readme": "none",
+  "githubPages": false
+}
