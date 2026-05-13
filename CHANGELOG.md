@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.3.0] - 2026-05-13
+
+### Added
+- **Elasticsearch MCP Server** (`@mcp-toolkit/elasticsearch`) — search, index_document, get_document, delete_document, bulk, list_indices, create_index, delete_index, index_mapping, count, cluster_health (11 tools)
+- Supports API key auth (Elastic Cloud) and basic auth
+- 30 tests (22 tools + 8 config)
+
+### Fixed
+- Fixed broken JSON in main README Claude Desktop configuration examples
+
 ## [0.2.0] - 2026-05-13
 
 ### Added

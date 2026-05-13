@@ -1,0 +1,33 @@
+{
+  "name": "@mcp-toolkit/elasticsearch",
+  "version": "0.1.0",
+  "type": "module",
+  "description": "Elasticsearch MCP Server - search, index, and manage documents",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "bin": {
+    "mcp-elasticsearch": "./dist/index.js"
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsx src/index.ts",
+    "test": "vitest run",
+    "lint": "tsc --noEmit -p tsconfig.json"
+  },
+  "dependencies": {
+    "@elastic/elasticsearch": "^8.17.0",
+    "@mcp-toolkit/core": "workspace:*",
+    "@mcp-toolkit/logger": "workspace:*",
+    "@modelcontextprotocol/sdk": "^1.12.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0",
+    "vitest": "^3.0.0"
+  }
+}

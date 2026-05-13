@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, and file systems with a single, unified toolkit.
+> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, and search engines with a single, unified toolkit.
 
 ## 📦 Packages
 
@@ -17,12 +17,13 @@
 | `@mcp-toolkit/postgres` | PostgreSQL queries, schema inspection, DDL | 6 |
 | `@mcp-toolkit/mysql` | MySQL queries, schema inspection, explain, database listing | 6 |
 | `@mcp-toolkit/mongodb` | MongoDB CRUD, aggregation, collection/database management | 12 |
+| `@mcp-toolkit/elasticsearch` | Elasticsearch search, indexing, cluster management | 11 |
 | `@mcp-toolkit/fetch` | HTTP requests — GET, POST, PUT, DELETE, PATCH | 5 |
 | `@mcp-toolkit/filesystem` | File read/write/list/delete with path security | 8 |
 | `@mcp-toolkit/docker` | Docker container & image management | 7 |
 | `@mcp-toolkit/github` | GitHub repos, issues, PRs via REST API | 7 |
 
-**Total: 67 tools across 9 MCP servers**
+**Total: 78 tools across 10 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -69,12 +70,17 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
     "mysql": {
       "command": "npx",
       "args": ["@mcp-toolkit/mysql"],
-      "env": { "MYSQL_URL": "mysql://user:pass@localhost:3306/mydb" }
+      "env": { "MYSQL_URL": "mysql://user:password@localhost:3306/mydb" }
     },
     "mongodb": {
       "command": "npx",
       "args": ["@mcp-toolkit/mongodb"],
       "env": { "MONGODB_URL": "mongodb://localhost:27017/mydb" }
+    },
+    "elasticsearch": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/elasticsearch"],
+      "env": { "ELASTICSEARCH_URL": "http://localhost:9200" }
     },
     "fetch": {
       "command": "npx",
@@ -95,13 +101,15 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
 mcp-toolkit/
 ├── shared/
 │   ├── core/          # Tool registration, error handling, transport (stdio/SSE/HTTP)
-│   └── logger/        # Structured logging with redaction
+│   ├── logger/        # Structured logging with redaction
+│   └── mcp-base/      # Base MCP server utilities
 ├── packages/
 │   ├── redis/         # Redis MCP Server (ioredis)
 │   ├── sqlite/        # SQLite MCP Server (better-sqlite3)
 │   ├── postgres/      # PostgreSQL MCP Server (pg)
 │   ├── mysql/         # MySQL MCP Server (mysql2)
 │   ├── mongodb/       # MongoDB CRUD & Aggregation (mongodb)
+│   ├── elasticsearch/ # Elasticsearch search & indexing (@elastic/elasticsearch)
 │   ├── fetch/         # HTTP Fetch MCP Server (native fetch)
 │   ├── filesystem/    # Filesystem MCP Server (fs/promises)
 │   ├── docker/        # Docker MCP Server (dockerode)
