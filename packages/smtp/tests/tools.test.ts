@@ -35,7 +35,7 @@ function mockEmailClient(overrides: Partial<EmailClient> = {}): EmailClient {
       date: "Thu, 14 May 2026 10:00:00 +0000",
       seen: true,
       flags: ["\\Seen"],
-      body: "Hi, let\'s meet tomorrow at 10am.",
+      body: "Hi, let's meet tomorrow at 10am.",
       attachments: [],
       headers: { "Message-ID": "abc123@smtp.example.com" },
     }),

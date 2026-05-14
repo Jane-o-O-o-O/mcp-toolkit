@@ -31,7 +31,7 @@ export function createTerraformTools(tf: TerraformClient): McpTool[] {
     handler: async (args) =>
       safeRun(
         async () => tf.selectWorkspace(args.name as string),
-        (r) => `Switched from workspace \"${r.previous}\" to \"${r.current}\""`,
+        (r) => `Switched from workspace "${r.previous}" to "${r.current}"`,
       ),
   };
 
