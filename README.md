@@ -26,8 +26,10 @@
 | `@mcp-toolkit/kafka` | Kafka topic management, produce/consume, consumer groups | 8 |
 | `@mcp-toolkit/prometheus` | Prometheus metrics query, targets, alerts, rules | 7 |
 | `@mcp-toolkit/nats` | NATS pub/sub and JetStream message streaming | 7 |
+| `@mcp-toolkit/kubernetes` | Kubernetes pods, deployments, services, logs, namespaces | 8 |
+| `@mcp-toolkit/grafana` | Grafana dashboards, datasources, alerts, annotations, search | 8 |
 
-**Total: 108 tools across 14 MCP servers**
+**Total: 124 tools across 16 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -118,6 +120,16 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
       "command": "npx",
       "args": ["@mcp-toolkit/nats"],
       "env": { "NATS_URL": "nats://localhost:4222" }
+    },
+    "kubernetes": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/kubernetes"],
+      "env": { "K8S_CONTEXT": "minikube", "K8S_NAMESPACE": "default" }
+    },
+    "grafana": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/grafana"],
+      "env": { "GRAFANA_URL": "http://localhost:3000", "GRAFANA_API_KEY": "glsa_xxx" }
     }
   }
 }
@@ -145,7 +157,9 @@ mcp-toolkit/
 │   ├── s3/            # S3/MinIO MCP Server (@aws-sdk/client-s3)
 │   ├── kafka/         # Kafka MCP Server (kafkajs)
 │   ├── prometheus/    # Prometheus MCP Server (native fetch)
-│   └── nats/          # NATS MCP Server (nats)
+│   ├── nats/          # NATS MCP Server (nats)
+│   ├── kubernetes/    # Kubernetes MCP Server (@kubernetes/client-node)
+│   └── grafana/       # Grafana MCP Server (native fetch)
 ├── docker-compose.test.yml  # Integration test environment
 ├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json

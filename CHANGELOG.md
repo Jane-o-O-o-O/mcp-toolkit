@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.6.0] - 2026-05-14
+
+### Added
+- **Kubernetes MCP Server** (`@mcp-toolkit/kubernetes`) — list_pods, get_pod, list_deployments, scale_deployment, list_services, get_logs, list_namespaces, describe_resource (8 tools)
+- Supports kubeconfig, in-cluster auth (server + token), context selection
+- 22 tests (14 tools + 8 config)
+- **Grafana MCP Server** (`@mcp-toolkit/grafana`) — list_dashboards, get_dashboard, create_dashboard, list_datasources, query_datasource, list_alert_rules, create_annotation, search (8 tools)
+- Supports API key auth and basic auth
+- 22 tests (13 tools + 9 config)
+
+### Changed
+- Total tools: 108 → 124, servers: 14 → 16
+
 ## [0.5.0] - 2026-05-14
 
 ### Added
