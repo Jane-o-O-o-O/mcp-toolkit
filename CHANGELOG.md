@@ -2,6 +2,28 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.7.0] - 2026-05-14
+
+### Added
+- **Terraform MCP Server** (`@mcp-toolkit/terraform`) — list_workspaces, select_workspace, plan, apply, destroy, output, state_list, state_show (8 tools)
+  - Supports working directory, variable files, custom binary path
+  - Auto-approve mode for CI/CD pipelines
+  - State inspection (list resources, show resource details)
+  - 19 tests (11 tools + 8 config)
+- **Ansible MCP Server** (`@mcp-toolkit/ansible`) — run_playbook, list_hosts, run_adhoc, list_roles, list_collections, vault_encrypt, vault_decrypt, galaxy_install (8 tools)
+  - Supports inventory, private key, vault password file
+  - Ansible Vault encrypt/decrypt operations
+  - Galaxy role and collection management
+  - 19 tests (12 tools + 7 config)
+- **SMTP/IMAP MCP Server** (`@mcp-toolkit/smtp`) — send_email, list_emails, read_email, delete_email, list_folders, search_emails (6 tools)
+  - Send emails via SMTP (To, CC, BCC, HTML)
+  - Read mailbox via IMAP (list, read, delete, search)
+  - Gmail App Password support
+  - 19 tests (10 tools + 9 config)
+
+### Changed
+- Total tools: 124 → 146, servers: 16 → 19
+
 ## [0.6.0] - 2026-05-14
 
 ### Added

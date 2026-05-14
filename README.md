@@ -28,8 +28,11 @@
 | `@mcp-toolkit/nats` | NATS pub/sub and JetStream message streaming | 7 |
 | `@mcp-toolkit/kubernetes` | Kubernetes pods, deployments, services, logs, namespaces | 8 |
 | `@mcp-toolkit/grafana` | Grafana dashboards, datasources, alerts, annotations, search | 8 |
+| `@mcp-toolkit/terraform` | Terraform workspace, plan, apply, state management | 8 |
+| `@mcp-toolkit/ansible` | Ansible playbook, inventory, vault, Galaxy integration | 8 |
+| `@mcp-toolkit/smtp` | SMTP/IMAP email — send, list, read, delete, search | 6 |
 
-**Total: 124 tools across 16 MCP servers**
+**Total: 146 tools across 19 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -130,6 +133,26 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
       "command": "npx",
       "args": ["@mcp-toolkit/grafana"],
       "env": { "GRAFANA_URL": "http://localhost:3000", "GRAFANA_API_KEY": "glsa_xxx" }
+    },
+    "terraform": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/terraform"],
+      "env": { "TF_WORK_DIR": "/path/to/terraform/project" }
+    },
+    "ansible": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/ansible"],
+      "env": { "ANSIBLE_INVENTORY": "/etc/ansible/hosts", "ANSIBLE_PLAYBOOK_DIR": "/opt/ansible" }
+    },
+    "smtp": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/smtp"],
+      "env": {
+        "SMTP_HOST": "smtp.gmail.com",
+        "SMTP_USER": "your-email@gmail.com",
+        "SMTP_PASSWORD": "your-app-password",
+        "IMAP_HOST": "imap.gmail.com"
+      }
     }
   }
 }
@@ -159,7 +182,10 @@ mcp-toolkit/
 │   ├── prometheus/    # Prometheus MCP Server (native fetch)
 │   ├── nats/          # NATS MCP Server (nats)
 │   ├── kubernetes/    # Kubernetes MCP Server (@kubernetes/client-node)
-│   └── grafana/       # Grafana MCP Server (native fetch)
+│   ├── grafana/       # Grafana MCP Server (native fetch)
+│   ├── terraform/     # Terraform MCP Server (terraform CLI)
+│   ├── ansible/       # Ansible MCP Server (ansible-playbook CLI)
+│   └── smtp/          # SMTP/IMAP MCP Server (nodemailer, imap)
 ├── docker-compose.test.yml  # Integration test environment
 ├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json
