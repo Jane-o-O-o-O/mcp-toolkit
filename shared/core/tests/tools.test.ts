@@ -5,6 +5,7 @@ import {
   errorResult,
   safeRun,
   safeRunSync,
+  retryWithBackoff,
 } from "../src/tools.js";
 
 describe("tools helpers", () => {
@@ -107,6 +108,57 @@ describe("tools helpers", () => {
       });
       expect(result.isError).toBe(true);
       expect(result.content[0].text).toBe("Error: 123");
+    });
+  });
+
+  describe('retryWithBackoff', () => {
+    it('should return result on first attempt if successful', async () => {
+      let attempts = 0;
+      const result = await retryWithBackoff(async () => {
+        attempts++;
+        return 'ok';
+      });
+      expect(result).toBe('ok');
+      expect(attempts).toBe(1);
+    });
+
+    it('should retry on failure and succeed', async () => {
+      let attempts = 0;
+      const result = await retryWithBackoff(async () => {
+        attempts++;
+        if (attempts < 3) throw new Error('not yet');
+        return 'done';
+      }, { maxAttempts: 3, initialDelayMs: 10, backoffMultiplier: 1, maxDelayMs: 10 });
+      expect(result).toBe('done');
+      expect(attempts).toBe(3);
+    });
+
+    it('should throw after max attempts exceeded', async () => {
+      let attempts = 0;
+      await expect(
+        retryWithBackoff(async () => {
+          attempts++;
+          throw new Error('always fail');
+        }, { maxAttempts: 2, initialDelayMs: 10, backoffMultiplier: 1, maxDelayMs: 10 }),
+      ).rejects.toThrow('always fail');
+      expect(attempts).toBe(2);
+    });
+
+    it('should respect isRetryable predicate', async () => {
+      let attempts = 0;
+      await expect(
+        retryWithBackoff(async () => {
+          attempts++;
+          throw new Error('fatal');
+        }, {
+          maxAttempts: 5,
+          initialDelayMs: 10,
+          backoffMultiplier: 1,
+          maxDelayMs: 10,
+          isRetryable: (err) => err instanceof Error && err.message !== 'fatal',
+        }),
+      ).rejects.toThrow('fatal');
+      expect(attempts).toBe(1);
     });
   });
 });

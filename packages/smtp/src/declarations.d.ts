@@ -32,6 +32,9 @@ declare module "nodemailer" {
 }
 
 declare module "imap" {
+  import { EventEmitter } from "node:events";
+  import { Readable } from "node:stream";
+
   interface ImapOptions {
     user: string;
     password: string;
@@ -40,18 +43,51 @@ declare module "imap" {
     tls: boolean;
   }
 
+  interface MailBox {
+    name: string;
+    delimiter: string;
+    flags: string[];
+    exists: number;
+  }
+
+  interface FetchOptions {
+    bodies?: string | string[];
+    markSeen?: boolean;
+    struct?: boolean;
+  }
+
+  interface MessageAttributes {
+    uid: number;
+    flags: string[];
+    date: Date;
+    struct: unknown[];
+    size: number;
+  }
+
+  interface Fetch extends EventEmitter {
+    on(event: "message", cb: (msg: MessageEvent, seqno: number) => void): this;
+    on(event: "error", cb: (err: Error) => void): this;
+    on(event: "end", cb: () => void): this;
+  }
+
+  interface MessageEvent extends EventEmitter {
+    on(event: "body", cb: (stream: Readable, info: { which: string; size: number }) => void): this;
+    on(event: "attributes", cb: (attrs: MessageAttributes) => void): this;
+    on(event: "end", cb: () => void): this;
+  }
+
   class Imap {
     constructor(options: ImapOptions);
     connect(): void;
     end(): void;
-    openBox(name: string, readOnly: boolean, cb: (err: Error | null, box: any) => void): void;
-    seq: { fetch(range: string, options: any): any };
-    search(criteria: any[], cb: (err: Error | null, uids: number[]) => void): void;
-    fetch(uids: number[], options: any): any;
+    openBox(name: string, readOnly: boolean, cb: (err: Error | null, box: MailBox) => void): void;
+    seq: { fetch(range: string, options: FetchOptions): Fetch };
+    search(criteria: unknown[], cb: (err: Error | null, uids: number[]) => void): void;
+    fetch(uids: number[], options: FetchOptions): Fetch;
     addFlags(uid: string, flags: string[], cb: (err: Error | null) => void): void;
     getBoxes(cb: (err: Error | null, boxes: Record<string, { delimiter?: string }>) => void): void;
-    once(event: "ready", cb: () => void): void;
-    once(event: "error", cb: (err: Error) => void): void;
+    once(event: "ready", cb: () => void): this;
+    once(event: "error", cb: (err: Error) => void): this;
   }
 
   export default Imap;

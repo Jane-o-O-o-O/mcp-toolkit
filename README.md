@@ -31,8 +31,11 @@
 | `@mcp-toolkit/terraform` | Terraform workspace, plan, apply, state management | 8 |
 | `@mcp-toolkit/ansible` | Ansible playbook, inventory, vault, Galaxy integration | 8 |
 | `@mcp-toolkit/smtp` | SMTP/IMAP email — send, list, read, delete, search | 6 |
+| `@mcp-toolkit/notion` | Notion pages, databases, search, blocks CRUD | 9 |
+| `@mcp-toolkit/slack` | Slack messages, channels, users, reactions | 8 |
+| `@mcp-toolkit/supabase` | Supabase SQL queries, tables, auth, storage | 8 |
 
-**Total: 146 tools across 19 MCP servers**
+**Total: 171 tools across 22 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -153,6 +156,24 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
         "SMTP_PASSWORD": "your-app-password",
         "IMAP_HOST": "imap.gmail.com"
       }
+    },
+    "notion": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/notion"],
+      "env": { "NOTION_API_KEY": "secret_xxx" }
+    },
+    "slack": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/slack"],
+      "env": { "SLACK_BOT_TOKEN": "xoxb-xxx" }
+    },
+    "supabase": {
+      "command": "npx",
+      "args": ["@mcp-toolkit/supabase"],
+      "env": {
+        "SUPABASE_URL": "https://xxx.supabase.co",
+        "SUPABASE_SERVICE_ROLE_KEY": "eyJxxx"
+      }
     }
   }
 }
@@ -185,7 +206,10 @@ mcp-toolkit/
 │   ├── grafana/       # Grafana MCP Server (native fetch)
 │   ├── terraform/     # Terraform MCP Server (terraform CLI)
 │   ├── ansible/       # Ansible MCP Server (ansible-playbook CLI)
-│   └── smtp/          # SMTP/IMAP MCP Server (nodemailer, imap)
+│   ├── smtp/          # SMTP/IMAP MCP Server (nodemailer, imap)
+│   ├── notion/        # Notion MCP Server (Notion API)
+│   ├── slack/         # Slack MCP Server (Slack API)
+│   └── supabase/      # Supabase MCP Server (PostgREST + Storage)
 ├── docker-compose.test.yml  # Integration test environment
 ├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json

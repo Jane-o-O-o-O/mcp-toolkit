@@ -4,6 +4,7 @@ import { createMcpServer, startServer as startServerCore } from "@mcp-toolkit/co
 import { createLogger, type Logger } from "@mcp-toolkit/logger";
 import { loadConfig, type SmtpConfig } from "./config.js";
 import type { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import type { Readable } from "node:stream";
 
 export interface ServerContext {
   server: Server;
@@ -12,7 +13,31 @@ export interface ServerContext {
   config: SmtpConfig;
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
+interface MailBoxInfo {
+  name: string;
+  delimiter: string;
+  flags: string[];
+  exists: number;
+  messages?: { total: number };
+}
+
+interface MsgAttributes {
+  uid: number;
+  flags: string[];
+  date: Date;
+}
+
+interface MsgEvent {
+  on(event: "attributes", cb: (attrs: MsgAttributes) => void): void;
+  on(event: "body", cb: (stream: Readable, info: { which: string }) => void): void;
+  once(event: "end", cb: () => void): void;
+}
+
+interface FetchEvent {
+  on(event: "message", cb: (msg: MsgEvent, seqno: number) => void): void;
+  once(event: "end", cb: () => void): void;
+  once(event: "error", cb: (err: Error) => void): void;
+}
 
 /**
  * Create an email client using the SMTP/IMAP configuration.
@@ -61,18 +86,21 @@ function createEmailClient(config: SmtpConfig): EmailClient {
 
       return new Promise((resolve, reject) => {
         imap.once("ready", () => {
-          imap.openBox(folder, true, (err: Error | null, box: any) => {
+          imap.openBox(folder, true, (err: Error | null, box: MailBoxInfo) => {
             if (err) {
               imap.end();
               reject(err);
               return;
             }
-            const total = Math.min(box.messages.total, limit);
-            const start = Math.max(1, box.messages.total - total + 1);
-            const f = imap.seq.fetch(`${start}:${box.messages.total}`, {
-              bodies: ["HEADER.FIELDS (FROM SUBJECT DATE)"],
-              struct: true,
-            });
+            const total = Math.min(box.messages?.total ?? 0, limit);
+            const start = Math.max(1, (box.messages?.total ?? 0) - total + 1);
+            const f = imap.seq.fetch(
+              String(start) + ":" + String(box.messages?.total ?? 0),
+              {
+                bodies: ["HEADER.FIELDS (FROM SUBJECT DATE)"],
+                struct: true,
+              },
+            ) as unknown as FetchEvent;
             const emails: Array<{
               uid: string;
               subject: string;
@@ -81,13 +109,13 @@ function createEmailClient(config: SmtpConfig): EmailClient {
               seen: boolean;
               flags: string[];
             }> = [];
-            f.on("message", (msg: any, seqno: number) => {
+            f.on("message", (msg: MsgEvent, seqno: number) => {
               let uid = String(seqno);
               let header = "";
-              msg.on("attributes", (attrs: any) => {
+              msg.on("attributes", (attrs: MsgAttributes) => {
                 uid = String(attrs.uid);
               });
-              msg.on("body", (stream: any) => {
+              msg.on("body", (stream: Readable) => {
                 stream.on("data", (chunk: Buffer) => {
                   header += chunk.toString();
                 });
@@ -199,7 +227,7 @@ function createEmailClient(config: SmtpConfig): EmailClient {
 
       return new Promise((resolve, reject) => {
         imap.once("ready", () => {
-          imap.openBox(folder, true, (err: Error | null, _box: any) => {
+          imap.openBox(folder, true, (err: Error | null) => {
             if (err) {
               imap.end();
               reject(err);
@@ -219,7 +247,7 @@ function createEmailClient(config: SmtpConfig): EmailClient {
               const f = imap.fetch(uids.slice(-limit), {
                 bodies: ["HEADER.FIELDS (FROM SUBJECT DATE)"],
                 struct: true,
-              });
+              }) as unknown as FetchEvent;
               const emails: Array<{
                 uid: string;
                 subject: string;
@@ -228,13 +256,13 @@ function createEmailClient(config: SmtpConfig): EmailClient {
                 seen: boolean;
                 flags: string[];
               }> = [];
-              f.on("message", (msg: any, seqno: number) => {
+              f.on("message", (msg: MsgEvent, seqno: number) => {
                 let uid = String(seqno);
                 let header = "";
-                msg.on("attributes", (attrs: any) => {
+                msg.on("attributes", (attrs: MsgAttributes) => {
                   uid = String(attrs.uid);
                 });
-                msg.on("body", (stream: any) => {
+                msg.on("body", (stream: Readable) => {
                   stream.on("data", (chunk: Buffer) => {
                     header += chunk.toString();
                   });
@@ -243,7 +271,10 @@ function createEmailClient(config: SmtpConfig): EmailClient {
                   const subject = header.match(/Subject:\s*(.*)/i)?.[1]?.trim() ?? "";
                   const from = header.match(/From:\s*(.*)/i)?.[1]?.trim() ?? "";
                   const q = query.toLowerCase();
-                  if (subject.toLowerCase().includes(q) || from.toLowerCase().includes(q)) {
+                  if (
+                    subject.toLowerCase().includes(q) ||
+                    from.toLowerCase().includes(q)
+                  ) {
                     emails.push({
                       uid,
                       subject: subject || "(no subject)",
@@ -269,7 +300,9 @@ function createEmailClient(config: SmtpConfig): EmailClient {
   };
 }
 
-export async function createServerContext(config?: Partial<SmtpConfig>): Promise<ServerContext> {
+export async function createServerContext(
+  config?: Partial<SmtpConfig>,
+): Promise<ServerContext> {
   const fullConfig = config?.smtpHost
     ? {
         smtpHost: config.smtpHost,

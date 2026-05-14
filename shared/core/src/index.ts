@@ -7,6 +7,8 @@ export {
   errorResult,
   safeRun,
   safeRunSync,
+  type RetryOptions,
+  retryWithBackoff,
 } from "./tools.js";
 
 export {

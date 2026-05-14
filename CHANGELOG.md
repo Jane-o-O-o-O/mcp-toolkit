@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.8.0] - 2026-05-15
+
+### Added
+- **Notion MCP Server** () — search, list_pages, get_page, create_page, update_page, get_database, query_database, get_block_children, append_block_children (9 tools)
+  - Pages and databases CRUD
+  - Block children read/append for page content manipulation
+  - Full Notion API integration via native fetch
+  - 20 tests (12 tools + 8 config)
+- **Slack MCP Server** () — list_channels, send_message, get_channel_history, get_thread_replies, search_messages, get_user_info, list_users, add_reaction (8 tools)
+  - Channel and user management
+  - Message sending with thread support
+  - Message search and history
+  - 18 tests (11 tools + 7 config)
+- **Supabase MCP Server** () — execute_sql, list_tables, get_table_schema, insert_rows, update_rows, delete_rows, list_buckets, upload_file (8 tools)
+  - Raw SQL execution via PostgREST
+  - CRUD operations on tables
+  - Storage bucket and file management
+  - 21 tests (12 tools + 9 config)
+- Added  utility to  with exponential backoff and configurable retryable predicate
+
+### Changed
+- Total tools: 146 → 171, servers: 19 → 22
+- SMTP server: replaced all  types with proper IMAP type declarations (MailBox, MessageEvent, MsgAttributes, Readable)
+
 ## [0.7.0] - 2026-05-14
 
 ### Added
