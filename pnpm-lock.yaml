@@ -410,6 +410,31 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
 
+  packages/neo4j:
+    dependencies:
+      '@mcp-toolkit/core':
+        specifier: workspace:*
+        version: link:../../shared/core
+      '@mcp-toolkit/logger':
+        specifier: workspace:*
+        version: link:../../shared/logger
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.0
+        version: 1.29.0(zod@3.25.76)
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.18
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
+
   packages/notion:
     dependencies:
       '@mcp-toolkit/core':
@@ -491,6 +516,31 @@ importers:
         specifier: ^3.0.0
         version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
 
+  packages/rabbitmq:
+    dependencies:
+      '@mcp-toolkit/core':
+        specifier: workspace:*
+        version: link:../../shared/core
+      '@mcp-toolkit/logger':
+        specifier: workspace:*
+        version: link:../../shared/logger
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.0
+        version: 1.29.0(zod@3.25.76)
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.18
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
+
   packages/redis:
     dependencies:
       '@mcp-toolkit/core':
@@ -524,6 +574,31 @@ importers:
       '@aws-sdk/client-s3':
         specifier: ^3.700.0
         version: 3.1045.0
+      '@mcp-toolkit/core':
+        specifier: workspace:*
+        version: link:../../shared/core
+      '@mcp-toolkit/logger':
+        specifier: workspace:*
+        version: link:../../shared/logger
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.0
+        version: 1.29.0(zod@3.25.76)
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.18
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
+
+  packages/sentry:
+    dependencies:
       '@mcp-toolkit/core':
         specifier: workspace:*
         version: link:../../shared/core
@@ -679,6 +754,31 @@ importers:
         version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
 
   packages/terraform:
+    dependencies:
+      '@mcp-toolkit/core':
+        specifier: workspace:*
+        version: link:../../shared/core
+      '@mcp-toolkit/logger':
+        specifier: workspace:*
+        version: link:../../shared/logger
+      '@modelcontextprotocol/sdk':
+        specifier: ^1.12.0
+        version: 1.29.0(zod@3.25.76)
+      zod:
+        specifier: ^3.24.0
+        version: 3.25.76
+    devDependencies:
+      '@types/node':
+        specifier: ^22.0.0
+        version: 22.19.18
+      typescript:
+        specifier: ^5.6.0
+        version: 5.9.3
+      vitest:
+        specifier: ^3.0.0
+        version: 3.2.4(@types/node@22.19.18)(yaml@2.9.0)
+
+  packages/vault:
     dependencies:
       '@mcp-toolkit/core':
         specifier: workspace:*

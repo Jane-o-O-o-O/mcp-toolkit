@@ -38,8 +38,12 @@
 | `@mcp-toolkit/linear` | Linear project management — issues, projects, teams, labels, cycles | 8 |
 | `@mcp-toolkit/vercel` | Vercel deployments, projects, env vars, domains | 8 |
 | `@mcp-toolkit/cloudflare` | Cloudflare DNS, Workers, KV, cache management | 8 |
+| `@mcp-toolkit/rabbitmq` | RabbitMQ queues, exchanges, publish/consume via HTTP API | 8 |
+| `@mcp-toolkit/neo4j` | Neo4j graph database — Cypher queries, nodes, relationships | 8 |
+| `@mcp-toolkit/vault` | HashiCorp Vault — secrets KV, policies, health | 8 |
+| `@mcp-toolkit/sentry` | Sentry error tracking — issues, events, releases, projects | 8 |
 
-**Total: 203 tools across 26 MCP servers**
+**Total: 235 tools across 30 MCP servers — 790 tests**
 
 ## 🚀 Quick Start
 
@@ -145,6 +149,10 @@ mcp-toolkit/
 │   ├── linear/        # Linear MCP Server (Linear GraphQL API)
 │   ├── vercel/        # Vercel MCP Server (Vercel REST API)
 │   └── cloudflare/    # Cloudflare MCP Server (Cloudflare REST API)
+│   ├── rabbitmq/      # RabbitMQ MCP Server (HTTP Management API)
+│   ├── neo4j/         # Neo4j MCP Server (HTTP Transactional API)
+│   ├── vault/         # HashiCorp Vault MCP Server (Vault HTTP API)
+│   └── sentry/        # Sentry MCP Server (Sentry REST API)
 ├── docker-compose.test.yml  # Integration test environment
 ├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json
