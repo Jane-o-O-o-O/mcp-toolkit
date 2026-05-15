@@ -2,29 +2,58 @@
 
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2026-05-15
+
+### Added
+- **Stripe MCP Server** (`@mcp-toolkit/stripe`) — list_customers, get_customer, create_customer, list_charges, create_charge, list_products, create_product, list_subscriptions (8 tools)
+  - Customer management (list, get, create)
+  - Payment processing (charges)
+  - Product catalog and subscriptions
+  - 21 tests (10 tools + 11 config)
+- **Linear MCP Server** (`@mcp-toolkit/linear`) — list_issues, get_issue, create_issue, update_issue, list_projects, list_teams, list_labels, list_cycles (8 tools)
+  - Issue CRUD with team/project/assignee/state filters
+  - Project, team, label, and cycle listing
+  - Linear GraphQL API integration
+  - 19 tests (11 tools + 8 config)
+- **Vercel MCP Server** (`@mcp-toolkit/vercel`) — list_deployments, get_deployment, list_projects, get_project, create_project, list_env_vars, set_env_var, list_domains (8 tools)
+  - Deployment management and monitoring
+  - Project CRUD with framework support
+  - Environment variable and domain management
+  - 20 tests (12 tools + 8 config)
+- **Cloudflare MCP Server** (`@mcp-toolkit/cloudflare`) — list_zones, get_zone, list_dns_records, create_dns_record, delete_dns_record, list_workers, list_kv_namespaces, purge_cache (8 tools)
+  - DNS record management (A, AAAA, CNAME, TXT, MX)
+  - Workers and KV namespace listing
+  - Cache purge (everything, by files, by tags)
+  - 21 tests (13 tools + 8 config)
+
+### Changed
+- Total tools: 171 → 203, servers: 22 → 26
+- All new servers follow `McpTool[]` pattern with `safeRun` from `@mcp-toolkit/core`
+- Vercel package migrated from `server.tool()` to `McpTool[]` pattern for build compatibility
+
 ## [0.8.0] - 2026-05-15
 
 ### Added
-- **Notion MCP Server** () — search, list_pages, get_page, create_page, update_page, get_database, query_database, get_block_children, append_block_children (9 tools)
+- **Notion MCP Server** (`@mcp-toolkit/notion`) — search, list_pages, get_page, create_page, update_page, get_database, query_database, get_block_children, append_block_children (9 tools)
   - Pages and databases CRUD
   - Block children read/append for page content manipulation
   - Full Notion API integration via native fetch
   - 20 tests (12 tools + 8 config)
-- **Slack MCP Server** () — list_channels, send_message, get_channel_history, get_thread_replies, search_messages, get_user_info, list_users, add_reaction (8 tools)
+- **Slack MCP Server** (`@mcp-toolkit/slack`) — list_channels, send_message, get_channel_history, get_thread_replies, search_messages, get_user_info, list_users, add_reaction (8 tools)
   - Channel and user management
   - Message sending with thread support
   - Message search and history
   - 18 tests (11 tools + 7 config)
-- **Supabase MCP Server** () — execute_sql, list_tables, get_table_schema, insert_rows, update_rows, delete_rows, list_buckets, upload_file (8 tools)
+- **Supabase MCP Server** (`@mcp-toolkit/supabase`) — execute_sql, list_tables, get_table_schema, insert_rows, update_rows, delete_rows, list_buckets, upload_file (8 tools)
   - Raw SQL execution via PostgREST
   - CRUD operations on tables
   - Storage bucket and file management
   - 21 tests (12 tools + 9 config)
-- Added  utility to  with exponential backoff and configurable retryable predicate
+- Added `retryWithBackoff` utility to `@mcp-toolkit/core` with exponential backoff and configurable retryable predicate
 
 ### Changed
 - Total tools: 146 → 171, servers: 19 → 22
-- SMTP server: replaced all  types with proper IMAP type declarations (MailBox, MessageEvent, MsgAttributes, Readable)
+- SMTP server: replaced all `any` types with proper IMAP type declarations (MailBox, MessageEvent, MsgAttributes, Readable)
 
 ## [0.7.0] - 2026-05-14
 

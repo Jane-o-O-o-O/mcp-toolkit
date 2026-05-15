@@ -4,7 +4,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-5.6+-3178c6.svg?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 
-> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, search engines, message queues, object storage, and monitoring systems with a single, unified toolkit.
+> **Production-ready [Model Context Protocol](https://modelcontextprotocol.io) (MCP) server collection** — connect your AI agents to databases, containers, code hosting, file systems, search engines, message queues, object storage, monitoring systems, payments, project management, deployment platforms, and CDN management with a single, unified toolkit.
 
 ## 📦 Packages
 
@@ -34,8 +34,12 @@
 | `@mcp-toolkit/notion` | Notion pages, databases, search, blocks CRUD | 9 |
 | `@mcp-toolkit/slack` | Slack messages, channels, users, reactions | 8 |
 | `@mcp-toolkit/supabase` | Supabase SQL queries, tables, auth, storage | 8 |
+| `@mcp-toolkit/stripe` | Stripe payments — customers, charges, products, subscriptions | 8 |
+| `@mcp-toolkit/linear` | Linear project management — issues, projects, teams, labels, cycles | 8 |
+| `@mcp-toolkit/vercel` | Vercel deployments, projects, env vars, domains | 8 |
+| `@mcp-toolkit/cloudflare` | Cloudflare DNS, Workers, KV, cache management | 8 |
 
-**Total: 171 tools across 22 MCP servers**
+**Total: 203 tools across 26 MCP servers**
 
 ## 🚀 Quick Start
 
@@ -79,100 +83,27 @@ MCP_TRANSPORT=streamable-http MCP_PORT=3001 npx @mcp-toolkit/redis
       "command": "npx",
       "args": ["@mcp-toolkit/docker"]
     },
-    "mysql": {
+    "stripe": {
       "command": "npx",
-      "args": ["@mcp-toolkit/mysql"],
-      "env": { "MYSQL_URL": "mysql://user:pass@localhost:3306/mydb" }
+      "args": ["@mcp-toolkit/stripe"],
+      "env": { "STRIPE_API_KEY": "sk_live_xxx" }
     },
-    "mongodb": {
+    "linear": {
       "command": "npx",
-      "args": ["@mcp-toolkit/mongodb"],
-      "env": { "MONGODB_URL": "mongodb://localhost:27017/mydb" }
+      "args": ["@mcp-toolkit/linear"],
+      "env": { "LINEAR_API_KEY": "lin_api_xxx" }
     },
-    "elasticsearch": {
+    "vercel": {
       "command": "npx",
-      "args": ["@mcp-toolkit/elasticsearch"],
-      "env": { "ELASTICSEARCH_URL": "http://localhost:9200" }
+      "args": ["@mcp-toolkit/vercel"],
+      "env": { "VERCEL_TOKEN": "xxx" }
     },
-    "fetch": {
+    "cloudflare": {
       "command": "npx",
-      "args": ["@mcp-toolkit/fetch"]
-    },
-    "filesystem": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/filesystem"],
-      "env": { "FS_ROOT_DIR": "/home/user/projects" }
-    },
-    "s3": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/s3"],
+      "args": ["@mcp-toolkit/cloudflare"],
       "env": {
-        "S3_ENDPOINT": "http://localhost:9000",
-        "S3_ACCESS_KEY_ID": "minioadmin",
-        "S3_SECRET_ACCESS_KEY": "minioadmin"
-      }
-    },
-    "kafka": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/kafka"],
-      "env": { "KAFKA_BROKERS": "localhost:9092" }
-    },
-    "prometheus": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/prometheus"],
-      "env": { "PROMETHEUS_URL": "http://localhost:9090" }
-    },
-    "nats": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/nats"],
-      "env": { "NATS_URL": "nats://localhost:4222" }
-    },
-    "kubernetes": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/kubernetes"],
-      "env": { "K8S_CONTEXT": "minikube", "K8S_NAMESPACE": "default" }
-    },
-    "grafana": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/grafana"],
-      "env": { "GRAFANA_URL": "http://localhost:3000", "GRAFANA_API_KEY": "glsa_xxx" }
-    },
-    "terraform": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/terraform"],
-      "env": { "TF_WORK_DIR": "/path/to/terraform/project" }
-    },
-    "ansible": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/ansible"],
-      "env": { "ANSIBLE_INVENTORY": "/etc/ansible/hosts", "ANSIBLE_PLAYBOOK_DIR": "/opt/ansible" }
-    },
-    "smtp": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/smtp"],
-      "env": {
-        "SMTP_HOST": "smtp.gmail.com",
-        "SMTP_USER": "your-email@gmail.com",
-        "SMTP_PASSWORD": "your-app-password",
-        "IMAP_HOST": "imap.gmail.com"
-      }
-    },
-    "notion": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/notion"],
-      "env": { "NOTION_API_KEY": "secret_xxx" }
-    },
-    "slack": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/slack"],
-      "env": { "SLACK_BOT_TOKEN": "xoxb-xxx" }
-    },
-    "supabase": {
-      "command": "npx",
-      "args": ["@mcp-toolkit/supabase"],
-      "env": {
-        "SUPABASE_URL": "https://xxx.supabase.co",
-        "SUPABASE_SERVICE_ROLE_KEY": "eyJxxx"
+        "CLOUDFLARE_API_TOKEN": "xxx",
+        "CLOUDFLARE_ACCOUNT_ID": "xxx"
       }
     }
   }
@@ -209,7 +140,11 @@ mcp-toolkit/
 │   ├── smtp/          # SMTP/IMAP MCP Server (nodemailer, imap)
 │   ├── notion/        # Notion MCP Server (Notion API)
 │   ├── slack/         # Slack MCP Server (Slack API)
-│   └── supabase/      # Supabase MCP Server (PostgREST + Storage)
+│   ├── supabase/      # Supabase MCP Server (PostgREST + Storage)
+│   ├── stripe/        # Stripe MCP Server (Stripe REST API)
+│   ├── linear/        # Linear MCP Server (Linear GraphQL API)
+│   ├── vercel/        # Vercel MCP Server (Vercel REST API)
+│   └── cloudflare/    # Cloudflare MCP Server (Cloudflare REST API)
 ├── docker-compose.test.yml  # Integration test environment
 ├── docs/api/          # Auto-generated API docs (TypeDoc)
 └── tsconfig.base.json
